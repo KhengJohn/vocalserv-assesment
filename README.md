@@ -19,9 +19,21 @@ A comprehensive staff directory web application built for VocalServ's Frontend D
 
 2. **Install dependencies**
    \`\`\`bash
+   npm install
+   
+   If you encounter dependency conflicts, use:
+   \`\`\`bash
    npm install --legacy-peer-deps
    \`\`\`
+   # or
+   yarn install
+   \`\`\`
 
+If you encounter dependency conflicts, use:
+   \`\`\`bash
+   npm install --legacy-peer-deps
+   \`\`\`
+   
 3. **Start the development server**
    \`\`\`bash
    npm run dev
