@@ -869,7 +869,7 @@ export default function StaffDirectory() {
       </Dialog>
 
       <Dialog open={showEmployeeProfile} onOpenChange={setShowEmployeeProfile}>
-        <DialogContent className="max-w-2xl animate-in fade-in-50 zoom-in-95 duration-200">
+        <DialogContent className="max-w-2xl h-[80%] overflow-y-auto animate-in fade-in-50 zoom-in-95 duration-200">
           <DialogHeader>
             <DialogTitle>Employee Profile</DialogTitle>
           </DialogHeader>
