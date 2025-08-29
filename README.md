@@ -13,14 +13,14 @@ A comprehensive staff directory web application built for VocalServ's Frontend D
 
 1. **Clone the repository**
    \`\`\`bash
-   git clone <repository-url>
+   git clone https://github.com/KhengJohn/vocalserv-assesment
    cd assesment
    \`\`\`
 
 2. **Install dependencies**
    \`\`\`bash
    npm install
-   
+
    If you encounter dependency conflicts, use:
    \`\`\`bash
    npm install --legacy-peer-deps
