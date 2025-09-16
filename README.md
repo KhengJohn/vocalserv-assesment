@@ -226,7 +226,7 @@ staff-directory/
 
 For questions or issues regarding this assessment project, please contact:
 - **Developer**: John Idoko
-- **Email**: idokoohn42@yahoo.com
+- **Email**: idokojohn42@yahoo.com
 - **Assessment**: VocalServ Frontend Developer Role
 
 ## 📄 License
