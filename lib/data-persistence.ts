@@ -113,6 +113,7 @@ export class DataPersistence {
   static saveGradeLevels(gradeLevels: GradeLevel[]): boolean {
     try {
       const validGradeLevels = gradeLevels.filter(this.validateGradeLevel)
+      
       localStorage.setItem(STORAGE_KEYS.GRADE_LEVELS, JSON.stringify(validGradeLevels))
       this.createBackup(this.loadEmployees(), validGradeLevels)
       return true

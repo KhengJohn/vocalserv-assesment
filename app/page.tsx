@@ -1,11 +1,16 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,10 +20,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+} from "@/components/ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Search,
   Plus,
@@ -33,115 +44,139 @@ import {
   X,
   ArrowUpDown,
   AlertTriangle,
-} from "lucide-react"
-import { EmployeeForm } from "@/components/employee-form"
-import { EmployeeProfile } from "@/components/employee-profile"
-import { GradeLevelForm } from "@/components/grade-level-form"
-import { DataManagement } from "@/components/data-management"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { DataPersistence } from "@/lib/data-persistence"
-import { EmployeeCardSkeleton, StatsCardSkeleton } from "@/components/loading-skeleton"
+} from "lucide-react";
+import { EmployeeForm } from "@/components/employee-form";
+import { EmployeeProfile } from "@/components/employee-profile";
+import { GradeLevelForm } from "@/components/grade-level-form";
+import { DataManagement } from "@/components/data-management";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { DataPersistence } from "@/lib/data-persistence";
+import {
+  EmployeeCardSkeleton,
+  StatsCardSkeleton,
+} from "@/components/loading-skeleton";
 
 // Types for our data structures
 export interface Employee {
-  id: string
-  name: string
-  country: string
-  state: string
-  address: string
-  role: string
-  department: string
-  gradeLevel?: string
-  email?: string
-  phone?: string
+  id: string;
+  name: string;
+  country: string;
+  state: string;
+  address: string;
+  role: string;
+  department: string;
+  gradeLevel?: string;
+  email?: string;
+  phone?: string;
 }
 
 export interface GradeLevel {
-  id: string
-  name: string
-  description?: string
+  id: string;
+  name: string;
+  itemCode: string;
+  description?: string;
 }
 
 export default function StaffDirectory() {
-  const [employees, setEmployees] = useState<Employee[]>([])
-  const [gradeLevels, setGradeLevels] = useState<GradeLevel[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedGradeFilter, setSelectedGradeFilter] = useState<string>("all")
-  const [selectedDepartmentFilter, setSelectedDepartmentFilter] = useState<string>("all")
-  const [selectedCountryFilter, setSelectedCountryFilter] = useState<string>("all")
-  const [sortBy, setSortBy] = useState<string>("name")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
-  const [countries, setCountries] = useState<any[]>([])
-  const [editingEmployee, setEditingEmployee] = useState<Employee | undefined>()
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | undefined>()
-  const [editingGradeLevel, setEditingGradeLevel] = useState<GradeLevel | undefined>()
-  const [selectedGradeLevel, setSelectedGradeLevel] = useState<GradeLevel | undefined>()
-  const [showEmployeeForm, setShowEmployeeForm] = useState(false)
-  const [showEmployeeProfile, setShowEmployeeProfile] = useState(false)
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [showGradeLevelForm, setShowGradeLevelForm] = useState(false)
-  const [showGradeLevelDeleteDialog, setShowGradeLevelDeleteDialog] = useState(false)
-  const [activeTab, setActiveTab] = useState("employees")
-  const [dataError, setDataError] = useState<string>("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [isCountriesLoading, setIsCountriesLoading] = useState(false)
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [gradeLevels, setGradeLevels] = useState<GradeLevel[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedGradeFilter, setSelectedGradeFilter] = useState<string>("all");
+  const [selectedDepartmentFilter, setSelectedDepartmentFilter] =
+    useState<string>("all");
+  const [selectedCountryFilter, setSelectedCountryFilter] =
+    useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [countries, setCountries] = useState<any[]>([]);
+  const [editingEmployee, setEditingEmployee] = useState<
+    Employee | undefined
+  >();
+  const [selectedEmployee, setSelectedEmployee] = useState<
+    Employee | undefined
+  >();
+  const [editingGradeLevel, setEditingGradeLevel] = useState<
+    GradeLevel | undefined
+  >();
+  const [selectedGradeLevel, setSelectedGradeLevel] = useState<
+    GradeLevel | undefined
+  >();
+  const [showEmployeeForm, setShowEmployeeForm] = useState(false);
+  const [showEmployeeProfile, setShowEmployeeProfile] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showGradeLevelForm, setShowGradeLevelForm] = useState(false);
+  const [showGradeLevelDeleteDialog, setShowGradeLevelDeleteDialog] =
+    useState(false);
+  const [activeTab, setActiveTab] = useState("employees");
+  const [dataError, setDataError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCountriesLoading, setIsCountriesLoading] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        setIsLoading(true)
-        const loadedEmployees = DataPersistence.loadEmployees()
-        const loadedGradeLevels = DataPersistence.loadGradeLevels()
+        setIsLoading(true);
+        const loadedEmployees = DataPersistence.loadEmployees();
+        const loadedGradeLevels = DataPersistence.loadGradeLevels();
 
-        setEmployees(loadedEmployees)
-        setGradeLevels(loadedGradeLevels)
-        setDataError("")
+        setEmployees(loadedEmployees);
+        setGradeLevels(loadedGradeLevels);
+        setDataError("");
       } catch (error) {
-        console.error("Failed to load data:", error)
-        setDataError("Failed to load data from storage. Some features may not work correctly.")
+        console.error("Failed to load data:", error);
+        setDataError(
+          "Failed to load data from storage. Some features may not work correctly."
+        );
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    loadData()
-    fetchCountries()
-  }, [])
+    loadData();
+    fetchCountries();
+  }, []);
 
   useEffect(() => {
     if (employees.length > 0 || gradeLevels.length > 0) {
-      const success = DataPersistence.saveEmployees(employees)
+      const success = DataPersistence.saveEmployees(employees);
       if (!success) {
-        setDataError("Failed to save employee data. Changes may be lost.")
+        setDataError("Failed to save employee data. Changes may be lost.");
       }
     }
-  }, [employees])
+  }, [employees]);
 
   useEffect(() => {
     if (gradeLevels.length > 0) {
-      const success = DataPersistence.saveGradeLevels(gradeLevels)
+      const success = DataPersistence.saveGradeLevels(gradeLevels);
       if (!success) {
-        setDataError("Failed to save grade level data. Changes may be lost.")
+        setDataError("Failed to save grade level data. Changes may be lost.");
       }
     }
-  }, [gradeLevels])
+  }, [gradeLevels]);
 
   const fetchCountries = async () => {
     try {
-      setIsCountriesLoading(true)
+      setIsCountriesLoading(true);
       const response = await fetch(
-        "https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json",
-      )
-      const data = await response.json()
-      setCountries(data)
+        "https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json"
+      );
+      const data = await response.json();
+      setCountries(data);
     } catch (error) {
-      console.error("Failed to fetch countries:", error)
+      console.error("Failed to fetch countries:", error);
     } finally {
-      setIsCountriesLoading(false)
+      setIsCountriesLoading(false);
     }
-  }
-
+  };
+  const filter = (() => {
+    const filteredData = employees.filter((employee) => {
+      const marchSearch =
+        employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        employee.address.toLowerCase().includes(searchTerm.toLowerCase());
+      return marchSearch;
+    });
+  })();
   const filteredAndSortedEmployees = (() => {
     const filtered = employees.filter((employee) => {
       const matchesSearch =
@@ -150,189 +185,222 @@ export default function StaffDirectory() {
         employee.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
         employee.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         employee.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        employee.state.toLowerCase().includes(searchTerm.toLowerCase())
+        employee.state.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesGrade = selectedGradeFilter === "all" || employee.gradeLevel === selectedGradeFilter
-      const matchesDepartment = selectedDepartmentFilter === "all" || employee.department === selectedDepartmentFilter
-      const matchesCountry = selectedCountryFilter === "all" || employee.country === selectedCountryFilter
+      const matchesGrade =
+        selectedGradeFilter === "all" ||
+        employee.gradeLevel === selectedGradeFilter;
+      const matchesDepartment =
+        selectedDepartmentFilter === "all" ||
+        employee.department === selectedDepartmentFilter;
+      const matchesCountry =
+        selectedCountryFilter === "all" ||
+        employee.country === selectedCountryFilter;
 
-      return matchesSearch && matchesGrade && matchesDepartment && matchesCountry
-    })
+      return (
+        matchesSearch && matchesGrade && matchesDepartment && matchesCountry
+      );
+    });
 
     // Sort the filtered results
     filtered.sort((a, b) => {
-      let aValue: string | undefined
-      let bValue: string | undefined
+      let aValue: string | undefined;
+      let bValue: string | undefined;
 
       switch (sortBy) {
         case "name":
-          aValue = a.name
-          bValue = b.name
-          break
+          aValue = a.name;
+          bValue = b.name;
+          break;
         case "role":
-          aValue = a.role
-          bValue = b.role
-          break
+          aValue = a.role;
+          bValue = b.role;
+          break;
         case "department":
-          aValue = a.department
-          bValue = b.department
-          break
+          aValue = a.department;
+          bValue = b.department;
+          break;
         case "country":
-          aValue = a.country
-          bValue = b.country
-          break
+          aValue = a.country;
+          bValue = b.country;
+          break;
         case "gradeLevel":
-          aValue = a.gradeLevel || ""
-          bValue = b.gradeLevel || ""
-          break
+          aValue = a.gradeLevel || "";
+          bValue = b.gradeLevel || "";
+          break;
         default:
-          aValue = a.name
-          bValue = b.name
+          aValue = a.name;
+          bValue = b.name;
       }
 
-      if (!aValue && !bValue) return 0
-      if (!aValue) return 1
-      if (!bValue) return -1
+      if (!aValue && !bValue) return 0;
+      if (!aValue) return 1;
+      if (!bValue) return -1;
 
-      const comparison = aValue.localeCompare(bValue)
-      return sortOrder === "asc" ? comparison : -comparison
-    })
+      const comparison = aValue.localeCompare(bValue);
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
 
-    return filtered
-  })()
+    return filtered;
+  })();
 
-  const uniqueDepartments = [...new Set(employees.map((emp) => emp.department))].sort()
-  const uniqueCountries = [...new Set(employees.map((emp) => emp.country))].sort()
+  const uniqueDepartments = [
+    ...new Set(employees.map((emp) => emp.department)),
+  ].sort();
+  const uniqueCountries = [
+    ...new Set(employees.map((emp) => emp.country)),
+  ].sort();
 
   const clearAllFilters = () => {
-    setSearchTerm("")
-    setSelectedGradeFilter("all")
-    setSelectedDepartmentFilter("all")
-    setSelectedCountryFilter("all")
-    setSortBy("name")
-    setSortOrder("asc")
-  }
+    setSearchTerm("");
+    setSelectedGradeFilter("all");
+    setSelectedDepartmentFilter("all");
+    setSelectedCountryFilter("all");
+    setSortBy("name");
+    setSortOrder("asc");
+  };
 
   const activeFiltersCount = [
     searchTerm,
     selectedGradeFilter !== "all",
     selectedDepartmentFilter !== "all",
     selectedCountryFilter !== "all",
-  ].filter(Boolean).length
+  ].filter(Boolean).length;
 
   const stats = {
     totalEmployees: employees.length,
     filteredEmployees: filteredAndSortedEmployees.length,
     departments: [...new Set(employees.map((emp) => emp.department))].length,
     gradeLevels: gradeLevels.length,
-  }
+  };
 
-  const handleImportData = (importedEmployees: Employee[], importedGradeLevels: GradeLevel[]) => {
-    setEmployees(importedEmployees)
-    setGradeLevels(importedGradeLevels)
-    setDataError("")
-  }
+  const handleImportData = (
+    importedEmployees: Employee[],
+    importedGradeLevels: GradeLevel[]
+  ) => {
+    setEmployees(importedEmployees);
+    setGradeLevels(importedGradeLevels);
+    setDataError("");
+  };
 
   const handleClearAllData = () => {
-    setEmployees([])
-    setGradeLevels([])
-    setDataError("")
-  }
+    setEmployees([]);
+    setGradeLevels([]);
+    setDataError("");
+  };
 
   const handleAddEmployee = () => {
-    setEditingEmployee(undefined)
-    setShowEmployeeForm(true)
-  }
+    setEditingEmployee(undefined);
+    setShowEmployeeForm(true);
+  };
 
   const handleEditEmployee = (employee: Employee) => {
-    setEditingEmployee(employee)
-    setShowEmployeeForm(true)
-  }
+    setEditingEmployee(employee);
+    setShowEmployeeForm(true);
+  };
 
   const handleViewEmployee = (employee: Employee) => {
-    setSelectedEmployee(employee)
-    setShowEmployeeProfile(true)
-  }
+    setSelectedEmployee(employee);
+    setShowEmployeeProfile(true);
+  };
 
   const handleDeleteEmployee = (employee: Employee) => {
-    setSelectedEmployee(employee)
-    setShowDeleteDialog(true)
-  }
+    setSelectedEmployee(employee);
+    setShowDeleteDialog(true);
+  };
 
   const handleSaveEmployee = (employeeData: Employee) => {
     if (editingEmployee) {
       // Update existing employee
-      setEmployees((prev) => prev.map((emp) => (emp.id === employeeData.id ? employeeData : emp)))
+      setEmployees((prev) =>
+        prev.map((emp) => (emp.id === employeeData.id ? employeeData : emp))
+      );
     } else {
       // Add new employee
-      setEmployees((prev) => [...prev, employeeData])
+      setEmployees((prev) => [...prev, employeeData]);
     }
-    setShowEmployeeForm(false)
-    setEditingEmployee(undefined)
-  }
+    setShowEmployeeForm(false);
+    setEditingEmployee(undefined);
+  };
 
   const confirmDeleteEmployee = () => {
     if (selectedEmployee) {
-      setEmployees((prev) => prev.filter((emp) => emp.id !== selectedEmployee.id))
-      setShowDeleteDialog(false)
-      setSelectedEmployee(undefined)
+      setEmployees((prev) =>
+        prev.filter((emp) => emp.id !== selectedEmployee.id)
+      );
+      setShowDeleteDialog(false);
+      setSelectedEmployee(undefined);
     }
-  }
+  };
 
   const handleAddGradeLevel = () => {
-    setEditingGradeLevel(undefined)
-    setShowGradeLevelForm(true)
-  }
+    setEditingGradeLevel(undefined);
+    setShowGradeLevelForm(true);
+  };
 
   const handleEditGradeLevel = (gradeLevel: GradeLevel) => {
-    setEditingGradeLevel(gradeLevel)
-    setShowGradeLevelForm(true)
-  }
+    setEditingGradeLevel(gradeLevel);
+    setShowGradeLevelForm(true);
+  };
 
   const handleDeleteGradeLevel = (gradeLevel: GradeLevel) => {
-    setSelectedGradeLevel(gradeLevel)
-    setShowGradeLevelDeleteDialog(true)
-  }
+    setSelectedGradeLevel(gradeLevel);
+    setShowGradeLevelDeleteDialog(true);
+  };
 
   const handleSaveGradeLevel = (gradeLevelData: GradeLevel) => {
     if (editingGradeLevel) {
       // Update existing grade level
-      setGradeLevels((prev) => prev.map((grade) => (grade.id === gradeLevelData.id ? gradeLevelData : grade)))
+      setGradeLevels((prev) =>
+        prev.map((grade) =>
+          grade.id === gradeLevelData.id ? gradeLevelData : grade
+        )
+      );
       // Update employees with the old grade level name to the new one
       if (editingGradeLevel.name !== gradeLevelData.name) {
         setEmployees((prev) =>
           prev.map((emp) =>
-            emp.gradeLevel === editingGradeLevel.name ? { ...emp, gradeLevel: gradeLevelData.name } : emp,
-          ),
-        )
+            emp.gradeLevel === editingGradeLevel.name
+              ? { ...emp, gradeLevel: gradeLevelData.name }
+              : emp
+          )
+        );
       }
     } else {
       // Add new grade level
-      setGradeLevels((prev) => [...prev, gradeLevelData])
+      setGradeLevels((prev) => [...prev, gradeLevelData]);
     }
-    setShowGradeLevelForm(false)
-    setEditingGradeLevel(undefined)
-  }
+    setShowGradeLevelForm(false);
+    setEditingGradeLevel(undefined);
+  };
 
   const confirmDeleteGradeLevel = () => {
     if (selectedGradeLevel) {
       // Check if any employees are assigned to this grade level
-      const employeesWithGrade = employees.filter((emp) => emp.gradeLevel === selectedGradeLevel.name)
+      const employeesWithGrade = employees.filter(
+        (emp) => emp.gradeLevel === selectedGradeLevel.name
+      );
       if (employeesWithGrade.length > 0) {
         // Remove grade level assignment from employees
         setEmployees((prev) =>
-          prev.map((emp) => (emp.gradeLevel === selectedGradeLevel.name ? { ...emp, gradeLevel: undefined } : emp)),
-        )
+          prev.map((emp) =>
+            emp.gradeLevel === selectedGradeLevel.name
+              ? { ...emp, gradeLevel: undefined }
+              : emp
+          )
+        );
       }
-      setGradeLevels((prev) => prev.filter((grade) => grade.id !== selectedGradeLevel.id))
-      setShowGradeLevelDeleteDialog(false)
-      setSelectedGradeLevel(undefined)
+      setGradeLevels((prev) =>
+        prev.filter((grade) => grade.id !== selectedGradeLevel.id)
+      );
+      setShowGradeLevelDeleteDialog(false);
+      setSelectedGradeLevel(undefined);
     }
-  }
+  };
 
   const getEmployeeCountByGradeLevel = (gradeLevelName: string) => {
-    return employees.filter((emp) => emp.gradeLevel === gradeLevelName).length
-  }
+    return employees.filter((emp) => emp.gradeLevel === gradeLevelName).length;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -341,7 +409,9 @@ export default function StaffDirectory() {
         <div className="container mx-auto px-4 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="space-y-1">
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground text-balance">Staff Directory</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground text-balance">
+                Staff Directory
+              </h1>
               <p className="text-sm sm:text-base text-muted-foreground text-pretty">
                 Manage your organization's employees and grade levels
               </p>
@@ -371,7 +441,10 @@ export default function StaffDirectory() {
 
       <main className="container mx-auto px-4 py-6 sm:py-8">
         {dataError && (
-          <Alert variant="destructive" className="mb-6 animate-in slide-in-from-top-2 duration-300">
+          <Alert
+            variant="destructive"
+            className="mb-6 animate-in slide-in-from-top-2 duration-300"
+          >
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>{dataError}</AlertDescription>
           </Alert>
@@ -405,7 +478,10 @@ export default function StaffDirectory() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="employees" className="space-y-6 sm:space-y-8 animate-in fade-in-50 duration-200">
+          <TabsContent
+            value="employees"
+            className="space-y-6 sm:space-y-8 animate-in fade-in-50 duration-200"
+          >
             {/* Stats Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {isLoading ? (
@@ -419,41 +495,57 @@ export default function StaffDirectory() {
                 <>
                   <Card className="transition-all duration-200 hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">Total Employees</CardTitle>
+                      <CardTitle className="text-xs sm:text-sm font-medium">
+                        Total Employees
+                      </CardTitle>
                       <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-xl sm:text-2xl font-bold">{stats.totalEmployees}</div>
+                      <div className="text-xl sm:text-2xl font-bold">
+                        {stats.totalEmployees}
+                      </div>
                     </CardContent>
                   </Card>
 
                   <Card className="transition-all duration-200 hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">Filtered Results</CardTitle>
+                      <CardTitle className="text-xs sm:text-sm font-medium">
+                        Filtered Results
+                      </CardTitle>
                       <Search className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-xl sm:text-2xl font-bold">{stats.filteredEmployees}</div>
+                      <div className="text-xl sm:text-2xl font-bold">
+                        {stats.filteredEmployees}
+                      </div>
                     </CardContent>
                   </Card>
 
                   <Card className="transition-all duration-200 hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">Departments</CardTitle>
+                      <CardTitle className="text-xs sm:text-sm font-medium">
+                        Departments
+                      </CardTitle>
                       <Building2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-xl sm:text-2xl font-bold">{stats.departments}</div>
+                      <div className="text-xl sm:text-2xl font-bold">
+                        {stats.departments}
+                      </div>
                     </CardContent>
                   </Card>
 
                   <Card className="transition-all duration-200 hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">Grade Levels</CardTitle>
+                      <CardTitle className="text-xs sm:text-sm font-medium">
+                        Grade Levels
+                      </CardTitle>
                       <Award className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-xl sm:text-2xl font-bold">{stats.gradeLevels}</div>
+                      <div className="text-xl sm:text-2xl font-bold">
+                        {stats.gradeLevels}
+                      </div>
                     </CardContent>
                   </Card>
                 </>
@@ -482,7 +574,10 @@ export default function StaffDirectory() {
                     <Filter className="w-4 h-4 mr-2" />
                     <span className="hidden sm:inline">Filters</span>
                     {activeFiltersCount > 0 && (
-                      <Badge variant="secondary" className="ml-2 px-1 py-0 text-xs animate-in zoom-in-50 duration-200">
+                      <Badge
+                        variant="secondary"
+                        className="ml-2 px-1 py-0 text-xs animate-in zoom-in-50 duration-200"
+                      >
                         {activeFiltersCount}
                       </Badge>
                     )}
@@ -507,8 +602,13 @@ export default function StaffDirectory() {
                 <Card className="p-4 animate-in slide-in-from-top-2 duration-300">
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Grade Level</label>
-                      <Select value={selectedGradeFilter} onValueChange={setSelectedGradeFilter}>
+                      <label className="text-sm font-medium mb-2 block">
+                        Grade Level
+                      </label>
+                      <Select
+                        value={selectedGradeFilter}
+                        onValueChange={setSelectedGradeFilter}
+                      >
                         <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-ring/20">
                           <SelectValue placeholder="All Grades" />
                         </SelectTrigger>
@@ -524,8 +624,13 @@ export default function StaffDirectory() {
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Department</label>
-                      <Select value={selectedDepartmentFilter} onValueChange={setSelectedDepartmentFilter}>
+                      <label className="text-sm font-medium mb-2 block">
+                        Department
+                      </label>
+                      <Select
+                        value={selectedDepartmentFilter}
+                        onValueChange={setSelectedDepartmentFilter}
+                      >
                         <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-ring/20">
                           <SelectValue placeholder="All Departments" />
                         </SelectTrigger>
@@ -541,8 +646,13 @@ export default function StaffDirectory() {
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Country</label>
-                      <Select value={selectedCountryFilter} onValueChange={setSelectedCountryFilter}>
+                      <label className="text-sm font-medium mb-2 block">
+                        Country
+                      </label>
+                      <Select
+                        value={selectedCountryFilter}
+                        onValueChange={setSelectedCountryFilter}
+                      >
                         <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-ring/20">
                           <SelectValue placeholder="All Countries" />
                         </SelectTrigger>
@@ -558,7 +668,9 @@ export default function StaffDirectory() {
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Sort By</label>
+                      <label className="text-sm font-medium mb-2 block">
+                        Sort By
+                      </label>
                       <div className="flex gap-2">
                         <Select value={sortBy} onValueChange={setSortBy}>
                           <SelectTrigger className="flex-1 transition-all duration-200 focus:ring-2 focus:ring-ring/20">
@@ -567,15 +679,21 @@ export default function StaffDirectory() {
                           <SelectContent>
                             <SelectItem value="name">Name</SelectItem>
                             <SelectItem value="role">Role</SelectItem>
-                            <SelectItem value="department">Department</SelectItem>
+                            <SelectItem value="department">
+                              Department
+                            </SelectItem>
                             <SelectItem value="country">Country</SelectItem>
-                            <SelectItem value="gradeLevel">Grade Level</SelectItem>
+                            <SelectItem value="gradeLevel">
+                              Grade Level
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                          onClick={() =>
+                            setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                          }
                           className="bg-transparent transition-all duration-200 hover:scale-105"
                         >
                           <ArrowUpDown className="w-4 h-4" />
@@ -655,7 +773,9 @@ export default function StaffDirectory() {
                     <Users className="w-8 h-8 text-muted-foreground" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-lg font-semibold">No employees found</h3>
+                    <h3 className="text-lg font-semibold">
+                      No employees found
+                    </h3>
                     <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto text-pretty">
                       {employees.length === 0
                         ? "Get started by adding your first employee to the directory."
@@ -664,11 +784,18 @@ export default function StaffDirectory() {
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2 justify-center">
                     {activeFiltersCount > 0 && (
-                      <Button onClick={clearAllFilters} variant="outline" className="bg-transparent">
+                      <Button
+                        onClick={clearAllFilters}
+                        variant="outline"
+                        className="bg-transparent"
+                      >
                         Clear Filters
                       </Button>
                     )}
-                    <Button onClick={handleAddEmployee} className="transition-all duration-200 hover:scale-105">
+                    <Button
+                      onClick={handleAddEmployee}
+                      className="transition-all duration-200 hover:scale-105"
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Employee
                     </Button>
@@ -689,7 +816,9 @@ export default function StaffDirectory() {
                           <CardTitle className="text-base sm:text-lg truncate group-hover:text-primary transition-colors">
                             {employee.name}
                           </CardTitle>
-                          <p className="text-xs sm:text-sm text-muted-foreground truncate">{employee.role}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground truncate">
+                            {employee.role}
+                          </p>
                         </div>
                         {employee.gradeLevel && (
                           <Badge
@@ -704,13 +833,16 @@ export default function StaffDirectory() {
                     <CardContent className="pt-0">
                       <div className="space-y-2 text-xs sm:text-sm">
                         <div className="truncate">
-                          <span className="font-medium">Department:</span> {employee.department}
+                          <span className="font-medium">Department:</span>{" "}
+                          {employee.department}
                         </div>
                         <div className="truncate">
-                          <span className="font-medium">Location:</span> {employee.state}, {employee.country}
+                          <span className="font-medium">Location:</span>{" "}
+                          {employee.state}, {employee.country}
                         </div>
                         <div className="truncate">
-                          <span className="font-medium">Address:</span> {employee.address}
+                          <span className="font-medium">Address:</span>{" "}
+                          {employee.address}
                         </div>
                       </div>
                       <div className="flex gap-2 mt-4">
@@ -748,15 +880,23 @@ export default function StaffDirectory() {
             )}
           </TabsContent>
 
-          <TabsContent value="grades" className="space-y-6 sm:space-y-8 animate-in fade-in-50 duration-200">
+          <TabsContent
+            value="grades"
+            className="space-y-6 sm:space-y-8 animate-in fade-in-50 duration-200"
+          >
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="space-y-1">
-                <h2 className="text-xl sm:text-2xl font-bold text-foreground">Grade Level Management</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                  Grade Level Management
+                </h2>
                 <p className="text-sm sm:text-base text-muted-foreground">
                   Create and manage organizational grade levels
                 </p>
               </div>
-              <Button onClick={handleAddGradeLevel} className="transition-all duration-200 hover:scale-105">
+              <Button
+                onClick={handleAddGradeLevel}
+                className="transition-all duration-200 hover:scale-105"
+              >
                 <Plus className="w-4 h-4 mr-2" />
                 Add Grade Level
               </Button>
@@ -775,12 +915,18 @@ export default function StaffDirectory() {
                     <Award className="w-8 h-8 text-muted-foreground" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-lg font-semibold">No grade levels found</h3>
+                    <h3 className="text-lg font-semibold">
+                      No grade levels found
+                    </h3>
                     <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto text-pretty">
-                      Create your first grade level to start organizing employees by their career progression.
+                      Create your first grade level to start organizing
+                      employees by their career progression.
                     </p>
                   </div>
-                  <Button onClick={handleAddGradeLevel} className="transition-all duration-200 hover:scale-105">
+                  <Button
+                    onClick={handleAddGradeLevel}
+                    className="transition-all duration-200 hover:scale-105"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Grade Level
                   </Button>
@@ -799,7 +945,10 @@ export default function StaffDirectory() {
                         <div className="space-y-1 min-w-0 flex-1">
                           <CardTitle className="text-base sm:text-lg flex items-center group-hover:text-primary transition-colors">
                             <Award className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-secondary flex-shrink-0" />
-                            <span className="truncate">{gradeLevel.name}</span>
+                            <div className=" flex flex-col gap-5"><span className="truncate">{gradeLevel.name}</span>
+                            <span className="truncate">
+                              {gradeLevel.itemCode}
+                            </span></div>
                           </CardTitle>
                           <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                             {gradeLevel.description}
@@ -810,8 +959,13 @@ export default function StaffDirectory() {
                     <CardContent className="pt-0">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs sm:text-sm font-medium">Assigned Employees:</span>
-                          <Badge variant="outline" className="transition-all duration-200 group-hover:scale-105">
+                          <span className="text-xs sm:text-sm font-medium">
+                            Assigned Employees:
+                          </span>
+                          <Badge
+                            variant="outline"
+                            className="transition-all duration-200 group-hover:scale-105"
+                          >
                             {getEmployeeCountByGradeLevel(gradeLevel.name)}
                           </Badge>
                         </div>
@@ -842,7 +996,10 @@ export default function StaffDirectory() {
             )}
           </TabsContent>
 
-          <TabsContent value="data" className="space-y-6 sm:space-y-8 animate-in fade-in-50 duration-200">
+          <TabsContent
+            value="data"
+            className="space-y-6 sm:space-y-8 animate-in fade-in-50 duration-200"
+          >
             <DataManagement
               employees={employees}
               gradeLevels={gradeLevels}
@@ -856,7 +1013,9 @@ export default function StaffDirectory() {
       <Dialog open={showEmployeeForm} onOpenChange={setShowEmployeeForm}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto animate-in fade-in-50 zoom-in-95 duration-200">
           <DialogHeader>
-            <DialogTitle>{editingEmployee ? "Edit Employee" : "Add New Employee"}</DialogTitle>
+            <DialogTitle>
+              {editingEmployee ? "Edit Employee" : "Add New Employee"}
+            </DialogTitle>
           </DialogHeader>
           <EmployeeForm
             employee={editingEmployee}
@@ -877,8 +1036,8 @@ export default function StaffDirectory() {
             <EmployeeProfile
               employee={selectedEmployee}
               onEdit={() => {
-                setShowEmployeeProfile(false)
-                handleEditEmployee(selectedEmployee)
+                setShowEmployeeProfile(false);
+                handleEditEmployee(selectedEmployee);
               }}
               onClose={() => setShowEmployeeProfile(false)}
             />
@@ -889,7 +1048,9 @@ export default function StaffDirectory() {
       <Dialog open={showGradeLevelForm} onOpenChange={setShowGradeLevelForm}>
         <DialogContent className="max-w-md animate-in fade-in-50 zoom-in-95 duration-200">
           <DialogHeader>
-            <DialogTitle>{editingGradeLevel ? "Edit Grade Level" : "Add New Grade Level"}</DialogTitle>
+            <DialogTitle>
+              {editingGradeLevel ? "Edit Grade Level" : "Add New Grade Level"}
+            </DialogTitle>
           </DialogHeader>
           <GradeLevelForm
             gradeLevel={editingGradeLevel}
@@ -905,40 +1066,54 @@ export default function StaffDirectory() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Employee</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete {selectedEmployee?.name}? This action cannot be undone.
+              Are you sure you want to delete {selectedEmployee?.name}? This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteEmployee} className="bg-destructive hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={confirmDeleteEmployee}
+              className="bg-destructive hover:bg-destructive/90"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog open={showGradeLevelDeleteDialog} onOpenChange={setShowGradeLevelDeleteDialog}>
+      <AlertDialog
+        open={showGradeLevelDeleteDialog}
+        onOpenChange={setShowGradeLevelDeleteDialog}
+      >
         <AlertDialogContent className="animate-in fade-in-50 zoom-in-95 duration-200">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Grade Level</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete the grade level "{selectedGradeLevel?.name}"?
-              {getEmployeeCountByGradeLevel(selectedGradeLevel?.name || "") > 0 && (
+              Are you sure you want to delete the grade level "
+              {selectedGradeLevel?.name}"?
+              {getEmployeeCountByGradeLevel(selectedGradeLevel?.name || "") >
+                0 && (
                 <span className="block mt-2 text-amber-600">
-                  Warning: {getEmployeeCountByGradeLevel(selectedGradeLevel?.name || "")} employee(s) are currently
-                  assigned to this grade level. They will be unassigned.
+                  Warning:{" "}
+                  {getEmployeeCountByGradeLevel(selectedGradeLevel?.name || "")}{" "}
+                  employee(s) are currently assigned to this grade level. They
+                  will be unassigned.
                 </span>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteGradeLevel} className="bg-destructive hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={confirmDeleteGradeLevel}
+              className="bg-destructive hover:bg-destructive/90"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }
