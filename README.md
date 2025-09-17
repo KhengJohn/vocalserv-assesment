@@ -1,3 +1,7 @@
+# Live
+
+LIVE LINK: https://vocalserv.netlify.app/
+
 # Staff Directory Application
 
 A comprehensive staff directory web application built for VocalServ's Frontend Developer Assessment. This application allows organizations to manage employees and grade levels with advanced filtering, search capabilities, and data persistence.
